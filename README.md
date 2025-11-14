@@ -23,10 +23,25 @@ Edita `.env` con tus valores:
 
 ```env
 SUPABASE_URL=https://xxxxx.supabase.co
-SUPABASE_SERVICE_KEY=eyJhbGc...  # Service Role Key (no anon!)
+SUPABASE_SERVICE_KEY=eyJhbGc...  # ⚠️ Service Role Key (NO uses la anon key!)
 DISCORD_BOT_TOKEN=MTIxMjM...     # Token del bot de Discord
 DISCORD_GUILD_ID=1234567890      # ID de tu servidor
 ```
+
+**⚠️ IMPORTANTE - Clave de Supabase:**
+
+Debes usar la **SERVICE ROLE KEY**, NO la **ANON/PUBLIC KEY**.
+
+Para obtener la clave correcta:
+1. Ve a tu proyecto en [Supabase Dashboard](https://supabase.com/dashboard)
+2. Settings → API
+3. En "Project API keys", copia la clave **"service_role"** (no la "anon")
+4. Esta clave tiene permisos administrativos - manténla secreta
+
+Si usas la clave incorrecta, verás errores como:
+- `AuthApiError: Invalid API key`
+- `401 (Unauthorized)`
+- `This feature requires Supabase Admin API access`
 
 ### 3. Obtener el Bot Token de Discord
 
@@ -115,6 +130,22 @@ discord-bot/
 - Protege tu Bot Token como una contraseña
 
 ## 🐛 Troubleshooting
+
+**¿Tienes problemas?** Consulta la [Guía de Solución de Problemas](TROUBLESHOOTING.md) completa.
+
+### Problemas comunes:
+
+#### ❌ Error: "AuthApiError: Invalid API key" o "401 Unauthorized"
+
+**Causa:** Estás usando la ANON KEY en lugar de la SERVICE ROLE KEY.
+
+**Solución:** 
+1. Ve a Supabase Dashboard → Settings → API
+2. Copia la clave **"service_role"** (NO la "anon")
+3. Actualiza `SUPABASE_SERVICE_KEY` en tu `.env`
+4. Reinicia el bot
+
+Ver más detalles en [TROUBLESHOOTING.md](TROUBLESHOOTING.md#-problemas-de-autenticación-con-supabase)
 
 ### El bot no asigna roles
 - Verifica que el rol del bot esté más arriba en la jerarquía que los roles a asignar
