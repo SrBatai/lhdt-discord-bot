@@ -15,6 +15,56 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !DISCORD_BOT_TOKEN || !DISCORD_GUI
   process.exit(1);
 }
 
+// Validar que se esté usando Service Role Key y no Anon Key
+function validateSupabaseKey(key) {
+  try {
+    // Decodificar el JWT para verificar el rol
+    const payload = JSON.parse(Buffer.from(key.split('.')[1], 'base64').toString());
+    
+    if (payload.role === 'anon') {
+      console.error('');
+      console.error('❌ =====================================================');
+      console.error('❌ ERROR: Estás usando la ANON KEY de Supabase');
+      console.error('❌ =====================================================');
+      console.error('');
+      console.error('Este bot requiere la SERVICE ROLE KEY para funcionar correctamente.');
+      console.error('');
+      console.error('La ANON KEY tiene permisos limitados y NO puede:');
+      console.error('  • Acceder a la API de administración de Supabase');
+      console.error('  • Realizar operaciones que requieran bypass de RLS');
+      console.error('  • Gestionar usuarios de forma administrativa');
+      console.error('');
+      console.error('📖 Cómo obtener tu SERVICE ROLE KEY:');
+      console.error('  1. Ve a https://supabase.com/dashboard/project/TU_PROYECTO');
+      console.error('  2. Ve a Settings → API');
+      console.error('  3. En la sección "Project API keys"');
+      console.error('  4. Copia la clave "service_role" (NO la "anon/public")');
+      console.error('  5. Actualiza SUPABASE_SERVICE_KEY en tu archivo .env');
+      console.error('');
+      console.error('⚠️  IMPORTANTE: La service_role key es secreta y tiene permisos');
+      console.error('    administrativos completos. NUNCA la expongas en código cliente.');
+      console.error('');
+      console.error('=====================================================');
+      console.error('');
+      process.exit(1);
+    }
+    
+    if (payload.role === 'service_role') {
+      console.log('✅ Usando Service Role Key correctamente');
+      return true;
+    }
+    
+    console.warn('⚠️  Advertencia: La clave JWT tiene un rol inesperado:', payload.role);
+    return true;
+  } catch (err) {
+    console.warn('⚠️  No se pudo validar el formato de la clave Supabase');
+    console.warn('   Asegúrate de estar usando la SERVICE ROLE KEY, no la ANON KEY');
+    return true; // Continuar de todos modos si no se puede decodificar
+  }
+}
+
+validateSupabaseKey(SUPABASE_SERVICE_KEY);
+
 // Inicializar Supabase con service key para bypass RLS
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
