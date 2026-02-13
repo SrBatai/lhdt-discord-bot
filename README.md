@@ -2,6 +2,25 @@
 
 Bot automático que sincroniza roles de Discord con los niveles de usuarios en la plataforma LHDT.
 
+## 🎨 Web Dashboard
+
+Este proyecto ahora incluye un **dashboard web moderno** para monitorear el bot en tiempo real.
+
+![Dashboard Preview](https://github.com/user-attachments/assets/f177a534-30a0-4ee0-be82-0882482e6949)
+
+**Características del Dashboard:**
+- 📊 Estadísticas en tiempo real del bot
+- 🎭 Visualización de roles por nivel
+- 💻 Interfaz moderna con diseño de Discord
+- 📱 Totalmente responsive
+
+**Para iniciar el dashboard:**
+```bash
+npm run web:dev
+```
+
+Ver [WEB_README.md](./WEB_README.md) para más información sobre el dashboard web.
+
 ## 🚀 Configuración Rápida
 
 ### 1. Instalar dependencias
